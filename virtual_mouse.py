@@ -2,12 +2,19 @@ import cv2
 import numpy as np
 from hand_detector import HandDetector
 import math
-import pyautogui
 import time
 
-# PyAutoGUI settings for smooth operation
-pyautogui.FAILSAFE = False  # Disable failsafe (moving mouse to corner won't stop script)
-pyautogui.PAUSE = 0  # Remove pause between PyAutoGUI calls for smooth movement
+# Try importing pyautogui
+try:
+    import pyautogui
+    # PyAutoGUI settings for smooth operation
+    pyautogui.FAILSAFE = False  # Disable failsafe (moving mouse to corner won't stop script)
+    pyautogui.PAUSE = 0  # Remove pause between PyAutoGUI calls for smooth movement
+    PYAUTOGUI_AVAILABLE = True
+except ImportError:
+    PYAUTOGUI_AVAILABLE = False
+    print("Warning: PyAutoGUI not installed. Mouse control will not work.")
+    print("Install with: pip install pyautogui")
 
 class VirtualMouse:
     """
