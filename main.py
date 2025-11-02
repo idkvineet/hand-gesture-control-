@@ -100,6 +100,23 @@ def show_documentation():
    
    Controls: Press 'q' to quit
 
+🖱️ VIRTUAL MOUSE CONTROL
+   Gestures:
+   • Index finger up           - Move cursor
+   • Thumb + Index pinch       - Left click
+   • All fingers up            - Right click
+   • Fist (all fingers down)   - Scroll mode
+   
+   Features:
+   • Smooth cursor movement with position tracking
+   • Click cooldown to prevent accidental double clicks
+   • Active zone indicator (green rectangle)
+   • Real-time cursor position display
+   
+   Note: Requires 'pyautogui' package
+   
+   Controls: Press 'q' to quit
+
 🎨 VIRTUAL PAINTER
    Gestures:
    • Index finger up           - Draw on canvas
@@ -123,11 +140,11 @@ def show_documentation():
 ⚙️ SYSTEM REQUIREMENTS:
    • Python 3.7+
    • Webcam/Camera
-   • Required packages: opencv-python, mediapipe, numpy
+   • Required packages: opencv-python, mediapipe, numpy, pyautogui
    • Optional: pycaw (for volume control on Windows)
 
 📦 INSTALLATION:
-   pip install opencv-python mediapipe numpy
+   pip install opencv-python mediapipe numpy pyautogui
    pip install pycaw  # For volume control (Windows only)
 """
     
@@ -339,6 +356,63 @@ def run_volume_control():
     
     input("\nPress ENTER to return to main menu...")
 
+def run_virtual_mouse():
+    """Run virtual mouse control application."""
+    try:
+        # Check for pyautogui first
+        try:
+            import pyautogui
+        except ImportError:
+            clear_screen()
+            print_banner()
+            print("\n❌ Error: PyAutoGUI not installed")
+            print("\nPyAutoGUI is required for virtual mouse functionality.")
+            print("\nTo install, run:")
+            print("  pip install pyautogui")
+            print("\nFor Linux users, you may also need:")
+            print("  sudo apt-get install python3-tk python3-dev")
+            input("\nPress ENTER to return to main menu...")
+            return
+        
+        clear_screen()
+        print_banner()
+        print("\n🖱️ Starting Virtual Mouse Control...")
+        print("Press 'q' to return to main menu\n")
+        
+        # Import the virtual_mouse module
+        try:
+            import virtual_mouse
+            # Reload module to get fresh instance
+            import importlib
+            importlib.reload(virtual_mouse)
+        except ImportError as e:
+            print(f"\n❌ Error: Could not import virtual_mouse.py")
+            print(f"  Details: {e}")
+            print("\nPlease ensure 'virtual_mouse.py' is in the same directory as main.py")
+            input("\nPress ENTER to return to main menu...")
+            return
+        
+        print("Controls:")
+        print("  • Index finger up: Move cursor")
+        print("  • Thumb + Index pinch: Left click")
+        print("  • All fingers up: Right click")
+        print("  • Fist: Scroll mode\n")
+        input("Press ENTER to start...")
+        
+        print("\nInitializing virtual mouse...")
+        
+        # Run the virtual mouse main function
+        virtual_mouse.main()
+        
+    except KeyboardInterrupt:
+        print("\n\n✓ Virtual mouse interrupted by user")
+    except Exception as e:
+        print(f"\n❌ Error occurred: {e}")
+        import traceback
+        traceback.print_exc()
+    
+    input("\nPress ENTER to return to main menu...")
+
 def run_virtual_painter():
     """Run virtual painter application."""
     try:
@@ -404,7 +478,8 @@ def check_dependencies():
     dependencies = {
         'opencv-python': 'cv2',
         'mediapipe': 'mediapipe',
-        'numpy': 'numpy'
+        'numpy': 'numpy',
+        'pyautogui': 'pyautogui'
     }
     
     missing = []
@@ -451,7 +526,7 @@ def main():
         print_banner()
         print_menu()
         
-        choice = input("\nEnter your choice (0-5): ").strip()
+        choice = input("\nEnter your choice (0-6): ").strip()
         
         if choice == '1':
             run_basic_test()
@@ -460,8 +535,10 @@ def main():
         elif choice == '3':
             run_volume_control()
         elif choice == '4':
-            run_virtual_painter()
+            run_virtual_mouse()
         elif choice == '5':
+            run_virtual_painter()
+        elif choice == '6':
             show_documentation()
         elif choice == '0':
             clear_screen()
@@ -470,7 +547,7 @@ def main():
             print("   Goodbye!\n")
             sys.exit(0)
         else:
-            print("\n❌ Invalid choice! Please enter a number between 0-5.")
+            print("\n❌ Invalid choice! Please enter a number between 0-6.")
             input("Press ENTER to continue...")
 
 if __name__ == "__main__":
